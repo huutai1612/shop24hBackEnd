@@ -52,10 +52,10 @@ public class ProductController {
 		}
 	}
 	
-	@GetMapping("products/latest")
-	public ResponseEntity<Object> getLatestProduct() {
+	@GetMapping("product-lines/{productLineId}/products")
+	public ResponseEntity<Object> getLatestProduct(@PathVariable int productLineId) {
 		try {
-			return new ResponseEntity<>(productRepo.getLatestProduct(), HttpStatus.OK);
+			return new ResponseEntity<>(productRepo.getByProductLineId(productLineId), HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<>(e.getCause().getCause().getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
