@@ -16,4 +16,10 @@ public interface ProductRepo extends JpaRepository<Product, Integer> {
 			+ "where p.product_line_id = :productLineId" , nativeQuery = true)
 	List<Product> getByProductLineId(@Param("productLineId") int productLineId);
 	
+	@Query(value = "select *\n"
+			+ "from products p \n"
+			+ "where :minPrice < p.buy_price and p.buy_price < :maxPrice", nativeQuery = true)
+	List<Product> getProductByPrice(@Param("minPrice") int minPrice,
+			@Param("maxPrice") int maxPrice);
+	
 }

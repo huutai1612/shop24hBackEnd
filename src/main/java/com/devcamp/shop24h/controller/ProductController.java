@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.devcamp.shop24h.model.Product;
@@ -56,6 +57,16 @@ public class ProductController {
 	public ResponseEntity<Object> getLatestProduct(@PathVariable int productLineId) {
 		try {
 			return new ResponseEntity<>(productRepo.getByProductLineId(productLineId), HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(e.getCause().getCause().getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	@GetMapping("products/price")
+	public ResponseEntity<Object> getProductByPrice(@RequestParam int minPrice
+			, @RequestParam int maxPrice) {
+		try {
+			return new ResponseEntity<>(productRepo.getProductByPrice(minPrice, maxPrice), HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<>(e.getCause().getCause().getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
