@@ -18,18 +18,18 @@ public class Order {
 
 	@NotNull
 	@Column(name = "order_date", nullable = false)
-	@Temporal(TemporalType.TIMESTAMP)
+	@Temporal(TemporalType.DATE)
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	private Date orderDate;
 
 	@NotNull
 	@Column(name = "required_date", nullable = false)
-	@Temporal(TemporalType.TIMESTAMP)
+	@Temporal(TemporalType.DATE)
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	private Date requiredDate;
 
 	@Column(name = "shipped_date")
-	@Temporal(TemporalType.TIMESTAMP)
+	@Temporal(TemporalType.DATE)
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	private Date shippedDate;
 

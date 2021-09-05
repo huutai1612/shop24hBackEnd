@@ -23,7 +23,7 @@ public class Payment {
 
 	@NotNull
 	@Column(name = "payment_date", nullable = false)
-	@Temporal(TemporalType.TIMESTAMP)
+	@Temporal(TemporalType.DATE)
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	private Date paymentDate;
 

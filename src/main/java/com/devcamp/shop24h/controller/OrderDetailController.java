@@ -56,7 +56,7 @@ public class OrderDetailController {
 		}
 	}
 	
-	@PostMapping("/orders/{orderId}/order-details/products/{productId}")
+	@PostMapping("/orders/{orderId}/products/{productId}/order-details")
 	public ResponseEntity<Object> createOrderDetail(
 			@Valid @RequestBody OrderDetail newOrderDetail,
 			@PathVariable Integer orderId,

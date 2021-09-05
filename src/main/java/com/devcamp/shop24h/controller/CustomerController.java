@@ -47,6 +47,20 @@ public class CustomerController {
 			return new ResponseEntity<>(e.getCause().getCause().getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+	
+	@GetMapping("/customers/phone/{phoneNumber}")
+	public ResponseEntity<Object> getCustomerByPhone(@PathVariable String phoneNumber) {
+		try {
+			Optional<Customer> customerFound = customerRepo.findByPhoneNumber(phoneNumber);
+			if (customerFound.isPresent()) {
+				return new ResponseEntity<>(customerFound.get(), HttpStatus.OK);
+			} else {
+				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			}
+		} catch (Exception e) {
+			return new ResponseEntity<>(e.getCause().getCause().getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 
 	@PostMapping("/customers")
 	public ResponseEntity<Object> createCustomer(@Valid @RequestBody Customer newCustomer) {
