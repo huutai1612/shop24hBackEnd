@@ -19,18 +19,18 @@ public class Order {
 	@NotNull
 	@Column(name = "order_date", nullable = false)
 	@Temporal(TemporalType.DATE)
-	@JsonFormat(pattern = "yyyy-MM-dd")
+	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "UTC+7")
 	private Date orderDate;
 
 	@NotNull
 	@Column(name = "required_date", nullable = false)
 	@Temporal(TemporalType.DATE)
-	@JsonFormat(pattern = "yyyy-MM-dd")
+	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "UTC+7")
 	private Date requiredDate;
 
 	@Column(name = "shipped_date")
 	@Temporal(TemporalType.DATE)
-	@JsonFormat(pattern = "yyyy-MM-dd")
+	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "UTC+7")
 	private Date shippedDate;
 
 	@Column(name = "status")
