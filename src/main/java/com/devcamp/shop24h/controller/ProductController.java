@@ -101,7 +101,6 @@ public class ProductController {
 				updateProduct.setProductScale(newProduct.getProductScale());
 				updateProduct.setProductVendor(newProduct.getProductVendor());
 				updateProduct.setQuantityInStock(newProduct.getQuantityInStock());
-				updateProduct.setIsRelated(newProduct.getIsRelated());
 				updateProduct.setUrlImage(newProduct.getUrlImage());
 				return new ResponseEntity<>(productRepo.save(updateProduct), HttpStatus.OK);
 			} else {

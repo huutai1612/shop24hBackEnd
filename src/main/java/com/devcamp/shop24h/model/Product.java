@@ -17,7 +17,7 @@ public class Product {
 	private int id;
 
 	@NotEmpty(message = "product code can't be empty")
-	@Column(name = "product_code", nullable = false)
+	@Column(name = "product_code", nullable = false, unique = true)
 	private String productCode;
 
 	@NotEmpty(message = "product name can't be empty")
@@ -42,14 +42,10 @@ public class Product {
 	@NotNull
 	@Column(name = "buy_price", nullable = false)
 	private java.math.BigDecimal buyPrice;
-	
+
 	@NotEmpty(message = "url can't be empty")
 	@Column(name = "url_image", nullable = false)
 	private String urlImage;
-
-	@NotNull
-	@Column(name = "is_related", nullable = false)
-	private Boolean isRelated;
 
 	@ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	@JoinColumn(name = "product_line_id", nullable = false)
@@ -68,8 +64,8 @@ public class Product {
 			@NotEmpty(message = "product name can't be empty") String productName, String productDescription,
 			@NotEmpty(message = "product scale can't be empty") String productScale,
 			@NotEmpty(message = "product's vendor can't be empty") String productVendor, @NotNull int quantityInStock,
-			BigDecimal buyPrice, @NotEmpty(message = "url can't be empty") String urlImage, @NotNull Boolean isRelated,
-			ProductLine productLineId, List<OrderDetail> orderDetail) {
+			BigDecimal buyPrice, @NotEmpty(message = "url can't be empty") String urlImage, ProductLine productLineId,
+			List<OrderDetail> orderDetail) {
 		super();
 		this.id = id;
 		this.productCode = productCode;
@@ -80,7 +76,6 @@ public class Product {
 		this.quantityInStock = quantityInStock;
 		this.buyPrice = buyPrice;
 		this.urlImage = urlImage;
-		this.isRelated = isRelated;
 		this.productLineId = productLineId;
 		this.orderDetail = orderDetail;
 	}
@@ -163,14 +158,6 @@ public class Product {
 
 	public void setOrderDetail(List<OrderDetail> orderDetail) {
 		this.orderDetail = orderDetail;
-	}
-
-	public Boolean getIsRelated() {
-		return isRelated;
-	}
-
-	public void setIsRelated(Boolean isRelated) {
-		this.isRelated = isRelated;
 	}
 
 	public String getUrlImage() {
