@@ -40,7 +40,7 @@ public class PaymentExcelExporterByDate {
 	}
 	
 	public void writeHeaderLine() {
-		sheet = workbook.createSheet("Customers");
+		sheet = workbook.createSheet("Payment");
 		Row row = sheet.createRow(0);
 		CellStyle style = workbook.createCellStyle();
 		XSSFFont font = workbook.createFont();

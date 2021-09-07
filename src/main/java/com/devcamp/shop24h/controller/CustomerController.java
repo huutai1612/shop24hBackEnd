@@ -1,7 +1,14 @@
 package com.devcamp.shop24h.controller;
 
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +23,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.devcamp.shop24h.getquery.GetTotalPaymentCustomer;
 import com.devcamp.shop24h.model.Customer;
 import com.devcamp.shop24h.repository.CustomerRepo;
+import com.devcamp.shop24h.service.TypeCustomerExcelExporter;
 
 @CrossOrigin
 @RestController
@@ -29,6 +38,79 @@ public class CustomerController {
 	public ResponseEntity<Object> getAllCustomer() {
 		try {
 			return new ResponseEntity<>(customerRepo.findAll(), HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(e.getCause().getCause().getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	@GetMapping("/type-customer/excel/export/platinum")
+	public void exportPlatinumCustomer(HttpServletResponse response) throws IOException {
+		response.setContentType("application/octet-stream");
+		DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+        String currentDateTime = dateFormatter.format(new Date());
+        
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=type_platinum" + currentDateTime + ".xlsx";
+        response.setHeader(headerKey, headerValue);
+        
+        List<GetTotalPaymentCustomer> platinumCustomerList = new ArrayList<>();
+        customerRepo.getPlatinumCustomers().forEach(platinumCustomerList::add);
+        TypeCustomerExcelExporter excelExporter = new TypeCustomerExcelExporter(platinumCustomerList);
+        excelExporter.export(response); 
+	}
+	
+	@GetMapping("/type-customer/excel/export/gold")
+	public void exportGoldCustomer(HttpServletResponse response) throws IOException {
+		response.setContentType("application/octet-stream");
+		DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+        String currentDateTime = dateFormatter.format(new Date());
+        
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=type_gold" + currentDateTime + ".xlsx";
+        response.setHeader(headerKey, headerValue);
+        
+        List<GetTotalPaymentCustomer> platinumCustomerList = new ArrayList<>();
+        customerRepo.getGoldCustomers().forEach(platinumCustomerList::add);
+        TypeCustomerExcelExporter excelExporter = new TypeCustomerExcelExporter(platinumCustomerList);
+        excelExporter.export(response); 
+	}
+	
+	@GetMapping("/type-customer/excel/export/silver")
+	public void exportSilverCustomer(HttpServletResponse response) throws IOException {
+		response.setContentType("application/octet-stream");
+		DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+        String currentDateTime = dateFormatter.format(new Date());
+        
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=type_silver" + currentDateTime + ".xlsx";
+        response.setHeader(headerKey, headerValue);
+        
+        List<GetTotalPaymentCustomer> platinumCustomerList = new ArrayList<>();
+        customerRepo.getSilverCustomers().forEach(platinumCustomerList::add);
+        TypeCustomerExcelExporter excelExporter = new TypeCustomerExcelExporter(platinumCustomerList);
+        excelExporter.export(response); 
+	}
+	
+	@GetMapping("/type-customer/excel/export/vip")
+	public void exportVipCustomer(HttpServletResponse response) throws IOException {
+		response.setContentType("application/octet-stream");
+		DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+        String currentDateTime = dateFormatter.format(new Date());
+        
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=type_vip" + currentDateTime + ".xlsx";
+        response.setHeader(headerKey, headerValue);
+        
+        List<GetTotalPaymentCustomer> platinumCustomerList = new ArrayList<>();
+        customerRepo.getVipCustomer().forEach(platinumCustomerList::add);
+        TypeCustomerExcelExporter excelExporter = new TypeCustomerExcelExporter(platinumCustomerList);
+        excelExporter.export(response); 
+	}
+	
+	@GetMapping("/customers/count-orders")
+	public ResponseEntity<Object> getCustomerCountOrder() {
+		try {
+			return new ResponseEntity<>(customerRepo.getCountCustomerOrder(), HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<>(e.getCause().getCause().getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}

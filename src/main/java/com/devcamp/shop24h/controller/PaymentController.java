@@ -71,6 +71,7 @@ public class PaymentController {
 			return new ResponseEntity<>(e.getCause().getCause().getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+	
 	@GetMapping("/payment/excel/export/dates")
 	public void exportDatePayment(HttpServletResponse response) throws IOException {
 		response.setContentType("application/octet-stream");

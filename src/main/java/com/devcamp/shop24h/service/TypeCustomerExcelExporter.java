@@ -13,19 +13,19 @@ import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import com.devcamp.shop24h.getquery.GetPayment;
+import com.devcamp.shop24h.getquery.GetTotalPaymentCustomer;
 
-public class PaymentExcelExporterByMonth {
+public class TypeCustomerExcelExporter {
 	private XSSFWorkbook workbook;
 	private XSSFSheet sheet;
-	List<GetPayment> payments;
+	List<GetTotalPaymentCustomer> customers;
 
-	public PaymentExcelExporterByMonth(List<GetPayment> payments) {
+	public TypeCustomerExcelExporter(List<GetTotalPaymentCustomer> customers) {
 		super();
-		this.payments = payments;
+		this.customers = customers;
 		this.workbook = new XSSFWorkbook();
 	}
-	
+
 	private void createCell(Row row, int columnCount, Object value, CellStyle style) {
 		sheet.autoSizeColumn(columnCount);
 		Cell cell = row.createCell(columnCount);
@@ -40,7 +40,7 @@ public class PaymentExcelExporterByMonth {
 	}
 	
 	public void writeHeaderLine() {
-		sheet = workbook.createSheet("Payment");
+		sheet = workbook.createSheet("Customer Type");
 		Row row = sheet.createRow(0);
 		CellStyle style = workbook.createCellStyle();
 		XSSFFont font = workbook.createFont();
@@ -48,8 +48,9 @@ public class PaymentExcelExporterByMonth {
 		font.setBold(true);
 		font.setFontHeight(14);
 		int rowCount = 0;
-		createCell(row, rowCount++, "Tháng", style);
-		createCell(row, rowCount++, "Tổng thu nhập", style);
+		createCell(row, rowCount++, "Họ và tên", style);
+		createCell(row, rowCount++, "Số điện thoại", style);
+		createCell(row, rowCount++, "Số tiền đã thanh toán", style);
 	}
 	
 	private void writeDataLine() {
@@ -60,11 +61,12 @@ public class PaymentExcelExporterByMonth {
 		font.setFontHeight(11);
 		style.setFont(font);
 
-		for (GetPayment payment : payments) {
+		for (GetTotalPaymentCustomer customer : customers) {
 			Row row = sheet.createRow(rowCount++);
 			int columnCount = 0;
-			createCell(row, columnCount++ , payment.getMonth(), style);
-			createCell(row, columnCount++ , payment.getTotal(), style);
+			createCell(row, columnCount++ , customer.getFullName(), style);
+			createCell(row, columnCount++ , customer.getPhoneNumber(), style);
+			createCell(row, columnCount++ , customer.getTotalPayment(), style);
 		}
 	}
 	
@@ -78,5 +80,4 @@ public class PaymentExcelExporterByMonth {
 		
 		outputStream.close();
 	}
-
 }
