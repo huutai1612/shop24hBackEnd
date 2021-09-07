@@ -1,7 +1,14 @@
 package com.devcamp.shop24h.controller;
 
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +23,14 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.devcamp.shop24h.getquery.GetPayment;
 import com.devcamp.shop24h.model.Customer;
 import com.devcamp.shop24h.model.Payment;
 import com.devcamp.shop24h.repository.CustomerRepo;
 import com.devcamp.shop24h.repository.PaymentRepo;
+import com.devcamp.shop24h.service.PaymentExcelExporterByDate;
+import com.devcamp.shop24h.service.PaymentExcelExporterByMonth;
+import com.devcamp.shop24h.service.PaymentExcelExporterByWeek;
 
 @CrossOrigin
 @RestController
@@ -47,6 +58,71 @@ public class PaymentController {
 			} else {
 				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 			}
+		} catch (Exception e) {
+			return new ResponseEntity<>(e.getCause().getCause().getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	@GetMapping("/payments/dates")
+	public ResponseEntity<Object> getPaymentDate() {
+		try {
+			return new ResponseEntity<>(paymentRepo.getByDate(), HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(e.getCause().getCause().getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	@GetMapping("/payment/excel/export/dates")
+	public void exportDatePayment(HttpServletResponse response) throws IOException {
+		response.setContentType("application/octet-stream");
+		DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+        String currentDateTime = dateFormatter.format(new Date());
+        
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=date" + currentDateTime + ".xlsx";
+        response.setHeader(headerKey, headerValue);
+        
+        List<GetPayment> paymentList = new ArrayList<>();
+        paymentRepo.getByDate().forEach(paymentList::add);
+        PaymentExcelExporterByDate excelExporter = new PaymentExcelExporterByDate(paymentList);
+        excelExporter.export(response); 
+	}
+	
+	@GetMapping("/payment/excel/export/weeks")
+	public void exportWeekPayment(HttpServletResponse response) throws IOException {
+		response.setContentType("application/octet-stream");
+		DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+        String currentDateTime = dateFormatter.format(new Date());
+        
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=payment_week" + currentDateTime + ".xlsx";
+        response.setHeader(headerKey, headerValue);
+        
+        List<GetPayment> paymentList = new ArrayList<>();
+        paymentRepo.getByWeek().forEach(paymentList::add);
+        PaymentExcelExporterByWeek excelExporter = new PaymentExcelExporterByWeek(paymentList);
+        excelExporter.export(response); 
+	}
+	
+	@GetMapping("/payment/excel/export/months")
+	public void exportMonthPayment(HttpServletResponse response) throws IOException {
+		response.setContentType("application/octet-stream");
+		DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+        String currentDateTime = dateFormatter.format(new Date());
+        
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=payment_month" + currentDateTime + ".xlsx";
+        response.setHeader(headerKey, headerValue);
+        
+        List<GetPayment> paymentList = new ArrayList<>();
+        paymentRepo.getByMonth().forEach(paymentList::add);
+        PaymentExcelExporterByMonth excelExporter = new PaymentExcelExporterByMonth(paymentList);
+        excelExporter.export(response); 
+	}
+	
+	@GetMapping("/payments/weeks")
+	public ResponseEntity<Object> getPaymentWeek() {
+		try {
+			return new ResponseEntity<>(paymentRepo.getByWeek(), HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<>(e.getCause().getCause().getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
