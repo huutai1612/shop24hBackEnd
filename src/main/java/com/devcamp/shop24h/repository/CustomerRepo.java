@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.devcamp.shop24h.getquery.GetCustomerCountOrder;
@@ -19,6 +20,12 @@ public interface CustomerRepo extends JpaRepository<Customer, Integer> {
 			+ "from orders o \r\n" + "join customers c on o.customer_id = c.id \r\n"
 			+ "group by c.id", nativeQuery = true)
 	public List<GetCustomerCountOrder> getCountCustomerOrder();
+	
+	@Query(value = "select concat(c.first_name, ' ', c.last_name) fullName , count(o.id) totalOrder \r\n"
+			+ "from orders o join customers c on o.customer_id = c.id \r\n"
+			+ "group by c.id having totalOrder < :max and totalOrder > :min", nativeQuery = true)
+	public List<GetCustomerCountOrder> filterCountCustomerOrder(@Param("min") int min,
+																@Param("max") int max);
 
 	@Query(value = "select concat(c.first_name, ' ', c.last_name) fullName, c.phone_number phoneNumber, total.totalPayment\r\n"
 			+ "from customers c \r\n" + "join\r\n" + "(select sum(p.ammount) totalPayment, p.customer_id customerId\r\n"
