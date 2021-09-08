@@ -18,11 +18,8 @@ public class OrderDetail {
 	@JoinColumn(name = "order_id", nullable = false)
 	@JsonIgnore
 	private Order orderId;
-	
-	@ManyToOne(fetch = FetchType.LAZY, cascade = {
-			CascadeType.PERSIST,
-			CascadeType.MERGE
-	})
+
+	@ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	@JoinColumn(name = "product_id", nullable = false)
 	@JsonIgnore
 	private Product productId;

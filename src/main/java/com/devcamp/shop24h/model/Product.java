@@ -51,12 +51,15 @@ public class Product {
 	private Boolean isRelated;
 
 	@ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
-	@JoinColumn(name = "product_line_id", nullable = false)
+	@JoinColumn(name = "product_line_id")
 	@JsonIgnore
 	private ProductLine productLineId;
 
 	@OneToMany(mappedBy = "productId", fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	private List<OrderDetail> orderDetail;
+
+	@OneToMany(mappedBy = "productId", fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	private List<Comments> comments;
 
 	public Product() {
 		super();
@@ -68,7 +71,7 @@ public class Product {
 			@NotEmpty(message = "product scale can't be empty") String productScale,
 			@NotEmpty(message = "product's vendor can't be empty") String productVendor, @NotNull int quantityInStock,
 			BigDecimal buyPrice, @NotEmpty(message = "url can't be empty") String urlImage, Boolean isRelated,
-			ProductLine productLineId, List<OrderDetail> orderDetail) {
+			ProductLine productLineId, List<OrderDetail> orderDetail, List<Comments> comments) {
 		super();
 		this.id = id;
 		this.productCode = productCode;
@@ -82,6 +85,7 @@ public class Product {
 		this.isRelated = isRelated;
 		this.productLineId = productLineId;
 		this.orderDetail = orderDetail;
+		this.comments = comments;
 	}
 
 	public int getId() {
@@ -178,6 +182,14 @@ public class Product {
 
 	public void setIsRelated(Boolean isRelated) {
 		this.isRelated = isRelated;
+	}
+
+	public List<Comments> getComments() {
+		return comments;
+	}
+
+	public void setComments(List<Comments> comments) {
+		this.comments = comments;
 	}
 
 }
