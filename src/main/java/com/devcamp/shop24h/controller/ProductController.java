@@ -5,6 +5,7 @@ import java.util.Optional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -34,6 +35,24 @@ public class ProductController {
 	public ResponseEntity<Object> getAllProducts() {
 		try {
 			return new ResponseEntity<>(productRepo.findAll(), HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(e.getCause().getCause().getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	@GetMapping("/products/counts")
+	public ResponseEntity<Object> getCountTotalProduct() {
+		try {
+			return new ResponseEntity<>(productRepo.countTotalPoduct(), HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(e.getCause().getCause().getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	@GetMapping("/products/pages/{page}")
+	public ResponseEntity<Object> getPageableProduct(@PathVariable int page) {
+		try {
+			return new ResponseEntity<>(productRepo.getProductPageable(PageRequest.of(page, 6)), HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<>(e.getCause().getCause().getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}

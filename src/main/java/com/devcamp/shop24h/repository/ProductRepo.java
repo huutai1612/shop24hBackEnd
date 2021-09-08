@@ -2,6 +2,7 @@ package com.devcamp.shop24h.repository;
 
 import java.util.List;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -32,4 +33,12 @@ public interface ProductRepo extends JpaRepository<Product, Integer> {
 			+ "from products p \r\n"
 			+ "where p.is_related = 1", nativeQuery = true)
 	List<Product> getRelatedProduct();
+	
+	@Query(value = "select count(p.id) total \r\n"
+			+ "from products p ", nativeQuery = true)
+	int countTotalPoduct();
+	
+	@Query(value = "select *\r\n"
+			+ "from products p ", nativeQuery = true)
+	List<Product> getProductPageable(Pageable pageable);
 }
