@@ -22,4 +22,14 @@ public interface ProductRepo extends JpaRepository<Product, Integer> {
 	List<Product> getProductByPrice(@Param("minPrice") int minPrice,
 			@Param("maxPrice") int maxPrice);
 	
+	@Query(value = "select *\r\n"
+			+ "from products p \r\n"
+			+ "where p.product_name like %:name%", nativeQuery = true)
+	List<Product> getProductByName(@Param("name") String name);
+	
+	
+	@Query(value = "select *\r\n"
+			+ "from products p \r\n"
+			+ "where p.is_related = 1", nativeQuery = true)
+	List<Product> getRelatedProduct();
 }

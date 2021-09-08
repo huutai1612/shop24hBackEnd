@@ -47,6 +47,9 @@ public class Product {
 	@Column(name = "url_image", nullable = false)
 	private String urlImage;
 
+	@Column(name = "isRelated")
+	private Boolean isRelated;
+
 	@ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	@JoinColumn(name = "product_line_id", nullable = false)
 	@JsonIgnore
@@ -64,8 +67,8 @@ public class Product {
 			@NotEmpty(message = "product name can't be empty") String productName, String productDescription,
 			@NotEmpty(message = "product scale can't be empty") String productScale,
 			@NotEmpty(message = "product's vendor can't be empty") String productVendor, @NotNull int quantityInStock,
-			BigDecimal buyPrice, @NotEmpty(message = "url can't be empty") String urlImage, ProductLine productLineId,
-			List<OrderDetail> orderDetail) {
+			BigDecimal buyPrice, @NotEmpty(message = "url can't be empty") String urlImage, Boolean isRelated,
+			ProductLine productLineId, List<OrderDetail> orderDetail) {
 		super();
 		this.id = id;
 		this.productCode = productCode;
@@ -76,6 +79,7 @@ public class Product {
 		this.quantityInStock = quantityInStock;
 		this.buyPrice = buyPrice;
 		this.urlImage = urlImage;
+		this.isRelated = isRelated;
 		this.productLineId = productLineId;
 		this.orderDetail = orderDetail;
 	}
@@ -166,6 +170,14 @@ public class Product {
 
 	public void setUrlImage(String urlImage) {
 		this.urlImage = urlImage;
+	}
+
+	public Boolean getIsRelated() {
+		return isRelated;
+	}
+
+	public void setIsRelated(Boolean isRelated) {
+		this.isRelated = isRelated;
 	}
 
 }

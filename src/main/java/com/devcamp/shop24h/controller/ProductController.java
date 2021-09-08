@@ -39,6 +39,24 @@ public class ProductController {
 		}
 	}
 	
+	@GetMapping("/products/name/{name}")
+	public ResponseEntity<Object> getProductByName(@PathVariable String name) {
+		try {
+			return new ResponseEntity<>(productRepo.getProductByName(name), HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(e.getCause().getCause().getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	@GetMapping("/products/related")
+	public ResponseEntity<Object> getRelatedProduct() {
+		try {
+			return new ResponseEntity<>(productRepo.getRelatedProduct(), HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(e.getCause().getCause().getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
 	@GetMapping("/products/{productId}")
 	public ResponseEntity<Object> getProductById(@PathVariable Integer productId) {
 		try {
