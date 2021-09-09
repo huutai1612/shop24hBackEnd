@@ -42,6 +42,15 @@ public class OrderDetailController {
 		}
 	}
 	
+	@GetMapping("/orders/{orderId}/order-details")
+	public ResponseEntity<Object> getByOrderId(@PathVariable int orderId) {
+		try {
+			return new ResponseEntity<>(orderDetailRepo.getByOrderId(orderId), HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(e.getCause().getCause().getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
 	@GetMapping("/order-details/{orderDetailId}")
 	public ResponseEntity<Object> getOrderDetailById(@PathVariable Integer orderDetailId) {
 		try {
