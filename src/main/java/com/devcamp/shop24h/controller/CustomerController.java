@@ -118,10 +118,10 @@ public class CustomerController {
 	}
 	
 	@GetMapping("/customers/filter-count-orders")
-	public ResponseEntity<Object> getCustomerCountOrder(@RequestParam(defaultValue = "0") int min
-			, @RequestParam (defaultValue = "10000") int max) {
+	public ResponseEntity<Object> countOrderOfCustomerByDate(@RequestParam String firstDate
+			, @RequestParam String lastDate) {
 		try {
-			return new ResponseEntity<>(customerRepo.filterCountCustomerOrder(min, max), HttpStatus.OK);
+			return new ResponseEntity<>(customerRepo.filterCountCustomerOrder(firstDate, lastDate), HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<>(e.getCause().getCause().getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}

@@ -21,11 +21,12 @@ public interface CustomerRepo extends JpaRepository<Customer, Integer> {
 			+ "group by c.id", nativeQuery = true)
 	public List<GetCustomerCountOrder> getCountCustomerOrder();
 	
-	@Query(value = "select concat(c.first_name, ' ', c.last_name) fullName , count(o.id) totalOrder \r\n"
+	@Query(value = "select   o.order_date ,concat(c.first_name, ' ', c.last_name) fullName ,count(o.id) totalOrder \r\n"
 			+ "from orders o join customers c on o.customer_id = c.id \r\n"
-			+ "group by c.id having totalOrder < :max and totalOrder > :min", nativeQuery = true)
-	public List<GetCustomerCountOrder> filterCountCustomerOrder(@Param("min") int min,
-																@Param("max") int max);
+			+ "where o.order_date between :firstDate and :lastDate\r\n"
+			+ "group by c.id   ", nativeQuery = true)
+	public List<GetCustomerCountOrder> filterCountCustomerOrder(@Param("firstDate") String firstDate,
+																@Param("lastDate") String lastDate);
 
 	@Query(value = "select concat(c.first_name, ' ', c.last_name) fullName, c.phone_number phoneNumber, total.totalPayment\r\n"
 			+ "from customers c \r\n" + "join\r\n" + "(select sum(p.ammount) totalPayment, p.customer_id customerId\r\n"

@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.devcamp.shop24h.getquery.GetPayment;
@@ -16,6 +17,13 @@ public interface PaymentRepo extends JpaRepository<Payment, Integer> {
 			+ "from payments p \r\n"
 			+ "group by paymentDate ", nativeQuery = true)
 	public List<GetPayment> getByDate();
+	
+	@Query(value = "select p.payment_date paymentDate, week(p.payment_date) week, sum(p.ammount) total, month(p.payment_date) month\r\n"
+			+ "from payments p \r\n"
+			+ "where p.payment_date between :firstDate and :lastDate "
+			+ "group by paymentDate", nativeQuery = true)
+	public List<GetPayment> getByDateRange(@Param("firstDate") String firstDate,
+			@Param("lastDate") String lastDate);
 	
 	@Query(value = "select p.payment_date paymentDate, week(p.payment_date) week, sum(p.ammount) total, month(p.payment_date) month\r\n"
 			+ "from payments p \r\n"

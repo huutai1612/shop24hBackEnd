@@ -63,15 +63,6 @@ public class PaymentController {
 		}
 	}
 	
-	@GetMapping("/payments/dates")
-	public ResponseEntity<Object> getPaymentDate() {
-		try {
-			return new ResponseEntity<>(paymentRepo.getByDate(), HttpStatus.OK);
-		} catch (Exception e) {
-			return new ResponseEntity<>(e.getCause().getCause().getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
-	
 	@GetMapping("/payment/excel/export/dates")
 	public void exportDatePayment(HttpServletResponse response) throws IOException {
 		response.setContentType("application/octet-stream");
@@ -120,10 +111,29 @@ public class PaymentController {
         excelExporter.export(response); 
 	}
 	
+	@GetMapping("/payments/dates/{firstDate}/{lastDate}")
+	public ResponseEntity<Object> getPaymentDate(@PathVariable String firstDate,
+			@PathVariable String lastDate) {
+		try {
+			return new ResponseEntity<>(paymentRepo.getByDateRange(firstDate, lastDate), HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(e.getCause().getCause().getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
 	@GetMapping("/payments/weeks")
 	public ResponseEntity<Object> getPaymentWeek() {
 		try {
 			return new ResponseEntity<>(paymentRepo.getByWeek(), HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(e.getCause().getCause().getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	@GetMapping("/payments/months")
+	public ResponseEntity<Object> getPaymentMonth() {
+		try {
+			return new ResponseEntity<>(paymentRepo.getByMonth(), HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<>(e.getCause().getCause().getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
