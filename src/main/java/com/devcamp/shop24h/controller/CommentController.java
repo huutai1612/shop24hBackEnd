@@ -27,6 +27,7 @@ public class CommentController {
 	@Autowired
 	ProductRepo productRepo;
 	
+//	tạo mới comment
 	@PostMapping("/products/{productId}/comments")
 	public ResponseEntity<Object> createNewComments(@PathVariable int productId,@Valid @RequestBody Comments newComments) {
 		try {
@@ -42,6 +43,7 @@ public class CommentController {
 		}
 	}
 	
+//	tính rating trung bình của comment
 	@GetMapping("/products/{productId}/comments/average")
 	public ResponseEntity<Object> getAverageRate(@PathVariable int productId) {
 		try {

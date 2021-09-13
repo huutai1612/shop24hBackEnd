@@ -29,6 +29,7 @@ public class OrderController {
 	@Autowired
 	CustomerRepo customerRepo;
 	
+//	lấy tất cả order
 	@GetMapping("/orders")
 	public ResponseEntity<Object> getAllOrder() {
 		try {
@@ -38,6 +39,7 @@ public class OrderController {
 		}
 	}
 	
+//	lấy order cùng với thông tin khách hàng
 	@GetMapping("/customers/orders")
 	public ResponseEntity<Object> getOrderWithCustomer() {
 		try {
@@ -47,6 +49,7 @@ public class OrderController {
 		}
 	}
 	
+//	lấy order dựa trên id
 	@GetMapping("/orders/{orderId}")
 	public ResponseEntity<Object> getOrderById(@PathVariable Integer orderId) {
 		try {
@@ -61,6 +64,7 @@ public class OrderController {
 		}
 	}
 	
+//	tạo mới order
 	@PostMapping("/customers/{customerId}/orders")
 	public ResponseEntity<Object> createOrder (@Valid @RequestBody Order newOrder, @PathVariable int customerId) {
 		try {
@@ -72,6 +76,7 @@ public class OrderController {
 		}
 	}
 	
+//	sưa thông tin order
 	@PutMapping("/orders/{orderId}")
 	public ResponseEntity<Object> updateOrder(@PathVariable Integer orderId, @Valid @RequestBody Order newOrder) {
 		try {
@@ -92,6 +97,7 @@ public class OrderController {
 		}
 	}
 	
+//	xóa order bằng id
 	@DeleteMapping("/orders/{orderId}")
 	public ResponseEntity<Object> deleteOrderById(@PathVariable Integer orderId) {
 		try {
@@ -107,6 +113,7 @@ public class OrderController {
 		}
 	}
 	
+//	xóa toàn bộ order
 	@DeleteMapping("/orders")
 	public ResponseEntity<Object> deleteAllOrder() {
 		try {

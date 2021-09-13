@@ -25,6 +25,7 @@ public class ProductLineController {
 	@Autowired
 	ProductLineRepo productLineRepo;
 	
+//	lấy product line
 	@GetMapping("/product-lines")
 	public ResponseEntity<Object> getAllProductLines() {
 		try {
@@ -34,6 +35,7 @@ public class ProductLineController {
 		}
 	}
 	
+//	lấy product line dựa trên id
 	@GetMapping("/product-lines/{productLineId}")
 	public ResponseEntity<Object> getProductLineById(@PathVariable Integer productLineId) {
 		try {
@@ -48,6 +50,7 @@ public class ProductLineController {
 		}
 	}
 	
+//	tạo mới product line
 	@PostMapping("/product-lines")
 	public ResponseEntity<Object> createProductLine(@Valid @RequestBody ProductLine newProductLine) {
 		try {
@@ -57,6 +60,7 @@ public class ProductLineController {
 		}
 	}
 	
+//	sửa product line
 	@PutMapping("/product-lines/{productLineId}")
 	public ResponseEntity<Object> updateProductLine(@PathVariable Integer productLineId
 			,@Valid @RequestBody ProductLine newProductLine) {
@@ -75,6 +79,7 @@ public class ProductLineController {
 		}
 	}
 	
+//	xóa product line by id
 	@DeleteMapping("/product-lines/{productLineId}")
 	public ResponseEntity<Object> deleteProductLineById(@PathVariable Integer productLineId) {
 		try {
@@ -90,6 +95,7 @@ public class ProductLineController {
 		}
 	}
 	
+//	xóa tất cả product line
 	@DeleteMapping("/product-lines")
 	public ResponseEntity<Object> deleteAllProductLine() {
 		try {

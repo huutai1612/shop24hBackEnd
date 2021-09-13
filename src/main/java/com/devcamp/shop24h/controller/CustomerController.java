@@ -35,6 +35,7 @@ public class CustomerController {
 	@Autowired
 	CustomerRepo customerRepo;
 
+//	lấy tất cả khách hàng
 	@GetMapping("/customers")
 	public ResponseEntity<Object> getAllCustomer() {
 		try {
@@ -44,6 +45,7 @@ public class CustomerController {
 		}
 	}
 	
+//	xuất file excel khách hàng platinum
 	@GetMapping("/type-customer/excel/export/platinum")
 	public void exportPlatinumCustomer(HttpServletResponse response) throws IOException {
 		response.setContentType("application/octet-stream");
@@ -60,6 +62,7 @@ public class CustomerController {
         excelExporter.export(response); 
 	}
 	
+//	xuất file excel khách hàng gold
 	@GetMapping("/type-customer/excel/export/gold")
 	public void exportGoldCustomer(HttpServletResponse response) throws IOException {
 		response.setContentType("application/octet-stream");
@@ -76,6 +79,7 @@ public class CustomerController {
         excelExporter.export(response); 
 	}
 	
+//	xuất file excel khách hàng silver
 	@GetMapping("/type-customer/excel/export/silver")
 	public void exportSilverCustomer(HttpServletResponse response) throws IOException {
 		response.setContentType("application/octet-stream");
@@ -92,6 +96,7 @@ public class CustomerController {
         excelExporter.export(response); 
 	}
 	
+//	xuất file excel khách hàng vip
 	@GetMapping("/type-customer/excel/export/vip")
 	public void exportVipCustomer(HttpServletResponse response) throws IOException {
 		response.setContentType("application/octet-stream");
@@ -108,6 +113,7 @@ public class CustomerController {
         excelExporter.export(response); 
 	}
 	
+//	đếm số order của khách hàng
 	@GetMapping("/customers/count-orders")
 	public ResponseEntity<Object> getCustomerCountOrder() {
 		try {
@@ -117,6 +123,7 @@ public class CustomerController {
 		}
 	}
 	
+//	lọc số order của khách hàng theo ngày
 	@GetMapping("/customers/filter-count-orders")
 	public ResponseEntity<Object> countOrderOfCustomerByDate(@RequestParam String firstDate
 			, @RequestParam String lastDate) {
@@ -127,6 +134,7 @@ public class CustomerController {
 		}
 	}
 
+//	lấy khách hàng dựa trên id
 	@GetMapping("/customers/{customerId}")
 	public ResponseEntity<Object> getCustomerById(@PathVariable Integer customerId) {
 		try {
@@ -141,6 +149,7 @@ public class CustomerController {
 		}
 	}
 	
+//	lấy khách hàng dựa trên số điện thoại
 	@GetMapping("/customers/phone/{phoneNumber}")
 	public ResponseEntity<Object> getCustomerByPhone(@PathVariable String phoneNumber) {
 		try {
@@ -155,6 +164,7 @@ public class CustomerController {
 		}
 	}
 
+//	tạo mới khách hàng
 	@PostMapping("/customers")
 	public ResponseEntity<Object> createCustomer(@Valid @RequestBody Customer newCustomer) {
 		try {
@@ -164,6 +174,7 @@ public class CustomerController {
 		}
 	}
 
+//	sửa thông tin khách hàng
 	@PutMapping("/customers/{customerId}")
 	public ResponseEntity<Object> updateCustomer(@Valid @RequestBody Customer newCustomer,
 			@PathVariable int customerId) {
@@ -190,6 +201,7 @@ public class CustomerController {
 		}
 	}
 
+//	xóa tất cả khách hàng
 	@DeleteMapping("/customers")
 	public ResponseEntity<Object> deleteAllCustomer() {
 		try {
@@ -200,6 +212,7 @@ public class CustomerController {
 		}
 	}
 
+//	xóa khách hàng dựa trên id
 	@DeleteMapping("/customers/{customerId}")
 	public ResponseEntity<Object> deleteCustomerById(@PathVariable Integer customerId) {
 		try {

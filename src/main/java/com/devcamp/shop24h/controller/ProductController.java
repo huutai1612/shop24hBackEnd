@@ -31,6 +31,7 @@ public class ProductController {
 	@Autowired
 	ProductLineRepo productLineRepo;
 	
+//	lấy tất cả sản phẩm
 	@GetMapping("/products")
 	public ResponseEntity<Object> getAllProducts() {
 		try {
@@ -40,6 +41,7 @@ public class ProductController {
 		}
 	}
 	
+//	đếm số lượng sản phẩm để phân trang
 	@GetMapping("/products/counts")
 	public ResponseEntity<Object> getCountTotalProduct() {
 		try {
@@ -49,6 +51,7 @@ public class ProductController {
 		}
 	}
 	
+//	lấy sản phẩm phân trang
 	@GetMapping("/products/pages/{page}")
 	public ResponseEntity<Object> getPageableProduct(@PathVariable int page) {
 		try {
@@ -58,6 +61,7 @@ public class ProductController {
 		}
 	}
 	
+//	lấy theo tên sản phẩm
 	@GetMapping("/products/name/{name}")
 	public ResponseEntity<Object> getProductByName(@PathVariable String name) {
 		try {
@@ -67,6 +71,7 @@ public class ProductController {
 		}
 	}
 	
+//	lấy sản phẩm related
 	@GetMapping("/products/related")
 	public ResponseEntity<Object> getRelatedProduct() {
 		try {
@@ -76,6 +81,7 @@ public class ProductController {
 		}
 	}
 	
+//	lấy product by id
 	@GetMapping("/products/{productId}")
 	public ResponseEntity<Object> getProductById(@PathVariable Integer productId) {
 		try {
@@ -90,6 +96,7 @@ public class ProductController {
 		}
 	}
 	
+//	lọc sản phẩm theo loại
 	@GetMapping("product-lines/{productLineId}/products")
 	public ResponseEntity<Object> getLatestProduct(@PathVariable int productLineId) {
 		try {
@@ -99,6 +106,7 @@ public class ProductController {
 		}
 	}
 	
+//	lọc sản phẩm theo giá
 	@GetMapping("products/price")
 	public ResponseEntity<Object> getProductByPrice(@RequestParam int minPrice
 			, @RequestParam int maxPrice) {
@@ -109,6 +117,7 @@ public class ProductController {
 		}
 	}
 	
+//	tạo mới product
 	@PostMapping("/product-lines/{productLineId}/products")
 	public ResponseEntity<Object> createProduct(@Valid @RequestBody Product newProduct,
 			@PathVariable Integer productLineId) {
@@ -125,6 +134,7 @@ public class ProductController {
 		}
 	}
 	
+//	sửa product
 	@PutMapping("/products/{productId}")
 	public ResponseEntity<Object> updateProduct(@PathVariable Integer productId, @Valid @RequestBody Product newProduct) {
 		try {
@@ -139,6 +149,7 @@ public class ProductController {
 				updateProduct.setProductVendor(newProduct.getProductVendor());
 				updateProduct.setQuantityInStock(newProduct.getQuantityInStock());
 				updateProduct.setUrlImage(newProduct.getUrlImage());
+				updateProduct.setIsRelated(newProduct.getIsRelated());
 				return new ResponseEntity<>(productRepo.save(updateProduct), HttpStatus.OK);
 			} else {
 				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -148,6 +159,7 @@ public class ProductController {
 		}
 	}
 	
+//	xóa product by id
 	@DeleteMapping("/products/{productId}")
 	public ResponseEntity<Object> deleteProductById(@PathVariable Integer productId) {
 		try {
@@ -163,6 +175,7 @@ public class ProductController {
 		}
 	}
 	
+//	xóa tất cả product
 	@DeleteMapping("/products")
 	public ResponseEntity<Object> deleteAllProduct() {
 		try {

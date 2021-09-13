@@ -1,5 +1,7 @@
 package com.devcamp.shop24h.model;
 
+import java.math.BigDecimal;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -30,7 +32,7 @@ public class Comments {
 	private String comments;
 
 	@Column(name = "rate_star")
-	private int rateStar;
+	private java.math.BigDecimal rateStar;
 
 	@ManyToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST }, fetch = FetchType.LAZY)
 	@JsonIgnore
@@ -38,7 +40,7 @@ public class Comments {
 	private Product productId;
 
 	public Comments(int id, @NotEmpty(message = "name can't be empty") String name,
-			@NotEmpty(message = "comments can't be empty") String comments, int rateStar, Product productId) {
+			@NotEmpty(message = "comments can't be empty") String comments, BigDecimal rateStar, Product productId) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -84,11 +86,11 @@ public class Comments {
 		this.productId = productId;
 	}
 
-	public int getRateStar() {
+	public java.math.BigDecimal getRateStar() {
 		return rateStar;
 	}
 
-	public void setRateStar(int rateStar) {
+	public void setRateStar(java.math.BigDecimal rateStar) {
 		this.rateStar = rateStar;
 	}
 

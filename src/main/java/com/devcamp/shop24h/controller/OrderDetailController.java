@@ -33,6 +33,7 @@ public class OrderDetailController {
 	@Autowired
 	ProductRepo productRepo;
 	
+//	lấy toàn bộ order detail
 	@GetMapping("/order-details")
 	public ResponseEntity<Object> getAllOrderDetail() {
 		try {
@@ -42,6 +43,7 @@ public class OrderDetailController {
 		}
 	}
 	
+//	lấy order detail dựa trên order id
 	@GetMapping("/orders/{orderId}/order-details")
 	public ResponseEntity<Object> getByOrderId(@PathVariable int orderId) {
 		try {
@@ -51,6 +53,7 @@ public class OrderDetailController {
 		}
 	}
 	
+//	lấy order detail dựa trên id
 	@GetMapping("/order-details/{orderDetailId}")
 	public ResponseEntity<Object> getOrderDetailById(@PathVariable Integer orderDetailId) {
 		try {
@@ -65,6 +68,7 @@ public class OrderDetailController {
 		}
 	}
 	
+//	tạo mới order detail
 	@PostMapping("/orders/{orderId}/products/{productId}/order-details")
 	public ResponseEntity<Object> createOrderDetail(
 			@Valid @RequestBody OrderDetail newOrderDetail,
@@ -81,6 +85,7 @@ public class OrderDetailController {
 		}
 	}
 	
+//	sửa order detail
 	@PutMapping("/order-details/{orderDetailId}")
 	public ResponseEntity<Object> updateOrderDetail(@PathVariable Integer orderDetailId, @Valid @RequestBody OrderDetail newOrderDetail) {
 		try {
@@ -98,6 +103,7 @@ public class OrderDetailController {
 		}
 	}
 	
+//	xóa order detail dựa trên order detail id
 	@DeleteMapping("/order-details/{orderDetailId}")
 	public ResponseEntity<Object> deleteOrderDetailById (@PathVariable Integer orderDetailId) {
 		try {
@@ -113,6 +119,7 @@ public class OrderDetailController {
 		}
 	}
 	
+//	xóa tất cả order detail
 	@DeleteMapping("/order-details")
 	public ResponseEntity<Object> deleteAllOrderDetail() {
 		try {

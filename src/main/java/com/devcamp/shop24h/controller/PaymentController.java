@@ -40,6 +40,7 @@ public class PaymentController {
 	@Autowired
 	CustomerRepo customerRepo;
 	
+//	lấy tất cả payment
 	@GetMapping("/payments")
 	public ResponseEntity<Object> getAllPayments() {
 		try {
@@ -49,6 +50,7 @@ public class PaymentController {
 		}
 	}
  	
+//	lấy payment dựa trên id 
 	@GetMapping("/payments/{paymentId}")
 	public ResponseEntity<Object> getPaymentById(@PathVariable Integer paymentId) {
 		try {
@@ -63,6 +65,7 @@ public class PaymentController {
 		}
 	}
 	
+//	xuất file excel theo ngày
 	@GetMapping("/payment/excel/export/dates")
 	public void exportDatePayment(HttpServletResponse response) throws IOException {
 		response.setContentType("application/octet-stream");
@@ -79,6 +82,7 @@ public class PaymentController {
         excelExporter.export(response); 
 	}
 	
+//	xuất file excel payment theo tuần
 	@GetMapping("/payment/excel/export/weeks")
 	public void exportWeekPayment(HttpServletResponse response) throws IOException {
 		response.setContentType("application/octet-stream");
@@ -95,6 +99,7 @@ public class PaymentController {
         excelExporter.export(response); 
 	}
 	
+//	xuất file excel payment theo tháng
 	@GetMapping("/payment/excel/export/months")
 	public void exportMonthPayment(HttpServletResponse response) throws IOException {
 		response.setContentType("application/octet-stream");
@@ -111,6 +116,7 @@ public class PaymentController {
         excelExporter.export(response); 
 	}
 	
+//	lọc payment từ ngày đến ngày
 	@GetMapping("/payments/dates/{firstDate}/{lastDate}")
 	public ResponseEntity<Object> getPaymentDate(@PathVariable String firstDate,
 			@PathVariable String lastDate) {
@@ -121,6 +127,7 @@ public class PaymentController {
 		}
 	}
 
+//	lấy payment theo tuần
 	@GetMapping("/payments/weeks")
 	public ResponseEntity<Object> getPaymentWeek() {
 		try {
@@ -130,6 +137,7 @@ public class PaymentController {
 		}
 	}
 	
+//	lấy payment theo tháng
 	@GetMapping("/payments/months")
 	public ResponseEntity<Object> getPaymentMonth() {
 		try {
@@ -139,6 +147,7 @@ public class PaymentController {
 		}
 	}
 	
+//	tạo mới payment
 	@PostMapping("/customers/{customerId}/payments")
 	public ResponseEntity<Object> createPayment(@Valid @RequestBody Payment newPayment, @PathVariable int customerId) {
 		try {
@@ -150,6 +159,7 @@ public class PaymentController {
 		}
 	}
 	
+//	sửa payment
 	@PutMapping("/payments/{paymentId}")
 	public ResponseEntity<Object> updatePayment(@PathVariable Integer paymentId, @Valid @RequestBody Payment newPayment) {
 		try {
@@ -167,6 +177,8 @@ public class PaymentController {
 			return new ResponseEntity<>(e.getCause().getCause().getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+	
+//	xóa payment dựa trên id
 	@DeleteMapping("/payments/{paymentId}")
 	public ResponseEntity<Object> deletePaymentById(@PathVariable Integer paymentId) {
 		try {
@@ -182,6 +194,7 @@ public class PaymentController {
 		}
 	}
 	
+//	xóa tất cả payment
 	@DeleteMapping("/payments")
 	public ResponseEntity<Object> deleteAllPayment() {
 		try {
