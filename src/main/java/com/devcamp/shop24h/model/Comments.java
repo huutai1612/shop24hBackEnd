@@ -29,16 +29,21 @@ public class Comments {
 	@Column(name = "comments", nullable = false)
 	private String comments;
 
+	@Column(name = "rate_star")
+	private int rateStar;
+
 	@ManyToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST }, fetch = FetchType.LAZY)
 	@JsonIgnore
 	@JoinColumn(name = "productId")
 	private Product productId;
 
-	public Comments(int id, String name, String email, String comments, Product productId) {
+	public Comments(int id, @NotEmpty(message = "name can't be empty") String name,
+			@NotEmpty(message = "comments can't be empty") String comments, int rateStar, Product productId) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.comments = comments;
+		this.rateStar = rateStar;
 		this.productId = productId;
 	}
 
@@ -77,6 +82,14 @@ public class Comments {
 
 	public void setProductId(Product productId) {
 		this.productId = productId;
+	}
+
+	public int getRateStar() {
+		return rateStar;
+	}
+
+	public void setRateStar(int rateStar) {
+		this.rateStar = rateStar;
 	}
 
 }
