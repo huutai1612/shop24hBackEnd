@@ -136,7 +136,7 @@ public class CustomerController {
 
 //	lấy khách hàng dựa trên id
 	@GetMapping("/customers/{customerId}")
-	public ResponseEntity<Object> getCustomerById(@PathVariable Integer customerId) {
+	public ResponseEntity<Object> getCustomerById(@PathVariable Long customerId) {
 		try {
 			Optional<Customer> customerFound = customerRepo.findById(customerId);
 			if (customerFound.isPresent()) {
@@ -153,9 +153,9 @@ public class CustomerController {
 	@GetMapping("/customers/phone/{phoneNumber}")
 	public ResponseEntity<Object> getCustomerByPhone(@PathVariable String phoneNumber) {
 		try {
-			Optional<Customer> customerFound = customerRepo.findByPhoneNumber(phoneNumber);
-			if (customerFound.isPresent()) {
-				return new ResponseEntity<>(customerFound.get(), HttpStatus.OK);
+			Customer customerFound = customerRepo.findByPhoneNumber(phoneNumber);
+			if (customerFound != null) {
+				return new ResponseEntity<>(customerFound, HttpStatus.OK);
 			} else {
 				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 			}
@@ -177,7 +177,7 @@ public class CustomerController {
 //	sửa thông tin khách hàng
 	@PutMapping("/customers/{customerId}")
 	public ResponseEntity<Object> updateCustomer(@Valid @RequestBody Customer newCustomer,
-			@PathVariable int customerId) {
+			@PathVariable Long customerId) {
 		try {
 			Optional<Customer> customerFound = customerRepo.findById(customerId);
 			if (customerFound.isPresent()) {
@@ -214,7 +214,7 @@ public class CustomerController {
 
 //	xóa khách hàng dựa trên id
 	@DeleteMapping("/customers/{customerId}")
-	public ResponseEntity<Object> deleteCustomerById(@PathVariable Integer customerId) {
+	public ResponseEntity<Object> deleteCustomerById(@PathVariable Long customerId) {
 		try {
 			Optional<Customer> customerFound = customerRepo.findById(customerId);
 			if (customerFound.isPresent()) {

@@ -13,8 +13,10 @@ import com.devcamp.shop24h.getquery.GetTotalPaymentCustomer;
 import com.devcamp.shop24h.model.Customer;
 
 @Repository
-public interface CustomerRepo extends JpaRepository<Customer, Integer> {
-	Optional<Customer> findByPhoneNumber(String phoneNumber);
+public interface CustomerRepo extends JpaRepository<Customer, Long> {
+	Customer findByUsername(String username);
+	Customer findByPhoneNumber(String phoneNumber);
+//	Optional<Customer> findByPhoneNumber(String phoneNumber);
 
 	@Query(value = "select concat(c.first_name, ' ', c.last_name) fullName , count(o.id) totalOrder \r\n"
 			+ "from orders o \r\n" + "join customers c on o.customer_id = c.id \r\n"

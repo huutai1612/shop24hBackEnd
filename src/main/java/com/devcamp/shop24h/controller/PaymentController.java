@@ -149,7 +149,7 @@ public class PaymentController {
 	
 //	tạo mới payment
 	@PostMapping("/customers/{customerId}/payments")
-	public ResponseEntity<Object> createPayment(@Valid @RequestBody Payment newPayment, @PathVariable int customerId) {
+	public ResponseEntity<Object> createPayment(@Valid @RequestBody Payment newPayment, @PathVariable Long customerId) {
 		try {
 			Optional<Customer> customerFound = customerRepo.findById(customerId);
 			newPayment.setCustomerId(customerFound.get());

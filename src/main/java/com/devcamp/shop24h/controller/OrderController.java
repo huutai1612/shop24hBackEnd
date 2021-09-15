@@ -66,7 +66,7 @@ public class OrderController {
 	
 //	tạo mới order
 	@PostMapping("/customers/{customerId}/orders")
-	public ResponseEntity<Object> createOrder (@Valid @RequestBody Order newOrder, @PathVariable int customerId) {
+	public ResponseEntity<Object> createOrder (@Valid @RequestBody Order newOrder, @PathVariable Long customerId) {
 		try {
 			Optional<Customer> customerFound = customerRepo.findById(customerId);
 			newOrder.setCustomerId(customerFound.get());
