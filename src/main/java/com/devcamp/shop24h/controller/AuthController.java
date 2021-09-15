@@ -1,6 +1,8 @@
 package com.devcamp.shop24h.controller;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -43,8 +45,6 @@ public class AuthController {
     @Autowired
     private RoleRepo roleRepo;
     
-    @Autowired
-    private CustomerRepo useRepo;
     
     private Long G_CUSTOMER_ID = 3L;
     private Long G_MANAGER_ID = 2L;
@@ -72,19 +72,6 @@ public class AuthController {
 			return new ResponseEntity<>(e.getCause().getCause().getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
     }
-    
-    
-//    @PostMapping("/register/customer")
-//    public ResponseEntity<Object> registerNewCustomer(@Valid Customer newcustomer) {
-//    	try {
-//    		newcustomer.setPassword(new BCryptPasswordEncoder().encode(newcustomer.getPassword()));
-//    		newcustomer.setUsername(newcustomer.getPhoneNumber());
-//    		newcustomer.setRoles(Arrays.asList(roleRepo.findById(G_CUSTOMER_ID).get()));
-//    		return new ResponseEntity<>(userService.createUser(newcustomer), HttpStatus.CREATED);
-//		} catch (Exception e) {
-//			return new ResponseEntity<>(e.getCause().getCause().getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-//		}
-//    }
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Customer user) {
@@ -105,10 +92,24 @@ public class AuthController {
     @GetMapping("/user/checkrole")
     public ResponseEntity<Object> checkRole() {
     	try {
-			return ResponseEntity.ok("role customer");
+			return ResponseEntity.ok("customer");
 		} catch (Exception e) {
 			return new ResponseEntity<>(e.getCause().getCause().getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
     }
-   
+    
+    @PreAuthorize("hasAuthority('READ')")
+    @GetMapping("/user-info")
+    public ResponseEntity<Object> getUserInfo() {
+    	try {
+    		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    		UserPrincipal user = Optional.of(((UserPrincipal) authentication.getPrincipal())).get();
+    		List<Object> listInfo = new ArrayList<>();
+    		listInfo.add(user.getUsername());
+    		listInfo.add(user.getUserId());
+    		return ResponseEntity.ok(listInfo);
+		} catch (Exception e) {
+			return new ResponseEntity<>(e.getCause().getCause().getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+    }
 }
