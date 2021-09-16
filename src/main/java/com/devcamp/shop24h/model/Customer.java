@@ -65,14 +65,18 @@ public class Customer extends BaseEntity {
 			@JoinColumn(name = "role_id") })
 	private List<Role> roles = new ArrayList<>();
 
+	@OneToMany(mappedBy = "customerId", fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	private List<Comments> comments = new ArrayList<>();
+
 	public Customer() {
 		super();
 	}
 
 	public Customer(@NotEmpty(message = "last name can't be empty") String lastName,
-			@NotEmpty(message = "first name can't be empty") String firstName, String phoneNumber, String username,
-			String password, String address, String city, String state, String postalCode, String country,
-			int salesRepEmployeeNumber, int creditLimit) {
+			@NotEmpty(message = "first name can't be empty") String firstName,
+			@NotEmpty(message = "phone number can't be empty") String phoneNumber, String username, String password,
+			String address, String city, String state, String postalCode, String country, int salesRepEmployeeNumber,
+			int creditLimit) {
 		super();
 		this.lastName = lastName;
 		this.firstName = firstName;
@@ -296,6 +300,20 @@ public class Customer extends BaseEntity {
 	 */
 	public void setRoles(List<Role> roles) {
 		this.roles = roles;
+	}
+
+	/**
+	 * @return the comments
+	 */
+	public List<Comments> getComments() {
+		return comments;
+	}
+
+	/**
+	 * @param comments the comments to set
+	 */
+	public void setComments(List<Comments> comments) {
+		this.comments = comments;
 	}
 
 	/**

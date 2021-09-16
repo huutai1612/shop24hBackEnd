@@ -23,12 +23,10 @@ public class Comments {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-	@NotEmpty(message = "name can't be empty")
-	@Column(name = "name", nullable = false)
+	@Column(name = "name")
 	private String name;
 
-	@NotEmpty(message = "comments can't be empty")
-	@Column(name = "comments", nullable = false)
+	@Column(name = "comments")
 	private String comments;
 
 	@Column(name = "rate_star")
@@ -39,14 +37,19 @@ public class Comments {
 	@JoinColumn(name = "productId")
 	private Product productId;
 
-	public Comments(int id, @NotEmpty(message = "name can't be empty") String name,
-			@NotEmpty(message = "comments can't be empty") String comments, BigDecimal rateStar, Product productId) {
+	@ManyToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST }, fetch = FetchType.LAZY)
+	@JsonIgnore
+	@JoinColumn(name = "customerId")
+	private Customer customerId;
+
+	public Comments(int id, String name, String comments, BigDecimal rateStar, Product productId, Customer customerId) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.comments = comments;
 		this.rateStar = rateStar;
 		this.productId = productId;
+		this.customerId = customerId;
 	}
 
 	public Comments() {
@@ -92,6 +95,20 @@ public class Comments {
 
 	public void setRateStar(java.math.BigDecimal rateStar) {
 		this.rateStar = rateStar;
+	}
+
+	/**
+	 * @return the customerId
+	 */
+	public Customer getCustomerId() {
+		return customerId;
+	}
+
+	/**
+	 * @param customerId the customerId to set
+	 */
+	public void setCustomerId(Customer customerId) {
+		this.customerId = customerId;
 	}
 
 }

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -14,6 +15,9 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,6 +31,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.devcamp.shop24h.getquery.GetTotalPaymentCustomer;
 import com.devcamp.shop24h.model.Customer;
 import com.devcamp.shop24h.repository.CustomerRepo;
+import com.devcamp.shop24h.repository.RoleRepo;
+import com.devcamp.shop24h.security.UserPrincipal;
 import com.devcamp.shop24h.service.TypeCustomerExcelExporter;
 
 @CrossOrigin
@@ -34,6 +40,11 @@ import com.devcamp.shop24h.service.TypeCustomerExcelExporter;
 public class CustomerController {
 	@Autowired
 	CustomerRepo customerRepo;
+
+	@Autowired
+	private RoleRepo roleRepo;
+
+	private Long G_CUSTOMER_ID = 3L;
 
 //	lấy tất cả khách hàng
 	@GetMapping("/customers")
@@ -44,75 +55,103 @@ public class CustomerController {
 			return new ResponseEntity<>(e.getCause().getCause().getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+
+//	has authority
+//	get info khach hang
+	@PreAuthorize("hasAuthority('READ')")
+	@GetMapping("/user-info")
+	public ResponseEntity<Object> getUserInfo() {
+		try {
+			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+			UserPrincipal user = Optional.of(((UserPrincipal) authentication.getPrincipal())).get();
+			List<Object> listInfo = new ArrayList<>();
+			listInfo.add(user.getUsername());
+			listInfo.add(user.getUserId());
+			return ResponseEntity.ok(listInfo);
+		} catch (Exception e) {
+			return new ResponseEntity<>(e.getCause().getCause().getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 	
+//	check role
+	@PreAuthorize("hasAuthority('CUSTOMER')")
+    @GetMapping("/user/checkrole")
+    public ResponseEntity<Object> checkRole() {
+    	try {
+			return ResponseEntity.ok("customer");
+		} catch (Exception e) {
+			return new ResponseEntity<>(e.getCause().getCause().getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+    }
+
 //	xuất file excel khách hàng platinum
 	@GetMapping("/type-customer/excel/export/platinum")
 	public void exportPlatinumCustomer(HttpServletResponse response) throws IOException {
 		response.setContentType("application/octet-stream");
 		DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
-        String currentDateTime = dateFormatter.format(new Date());
-        
-        String headerKey = "Content-Disposition";
-        String headerValue = "attachment; filename=type_platinum" + currentDateTime + ".xlsx";
-        response.setHeader(headerKey, headerValue);
-        
-        List<GetTotalPaymentCustomer> platinumCustomerList = new ArrayList<>();
-        customerRepo.getPlatinumCustomers().forEach(platinumCustomerList::add);
-        TypeCustomerExcelExporter excelExporter = new TypeCustomerExcelExporter(platinumCustomerList);
-        excelExporter.export(response); 
+		String currentDateTime = dateFormatter.format(new Date());
+
+		String headerKey = "Content-Disposition";
+		String headerValue = "attachment; filename=type_platinum" + currentDateTime + ".xlsx";
+		response.setHeader(headerKey, headerValue);
+
+		List<GetTotalPaymentCustomer> platinumCustomerList = new ArrayList<>();
+		customerRepo.getPlatinumCustomers().forEach(platinumCustomerList::add);
+		TypeCustomerExcelExporter excelExporter = new TypeCustomerExcelExporter(platinumCustomerList);
+		excelExporter.export(response);
 	}
-	
+
 //	xuất file excel khách hàng gold
 	@GetMapping("/type-customer/excel/export/gold")
 	public void exportGoldCustomer(HttpServletResponse response) throws IOException {
 		response.setContentType("application/octet-stream");
 		DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
-        String currentDateTime = dateFormatter.format(new Date());
-        
-        String headerKey = "Content-Disposition";
-        String headerValue = "attachment; filename=type_gold" + currentDateTime + ".xlsx";
-        response.setHeader(headerKey, headerValue);
-        
-        List<GetTotalPaymentCustomer> platinumCustomerList = new ArrayList<>();
-        customerRepo.getGoldCustomers().forEach(platinumCustomerList::add);
-        TypeCustomerExcelExporter excelExporter = new TypeCustomerExcelExporter(platinumCustomerList);
-        excelExporter.export(response); 
+		String currentDateTime = dateFormatter.format(new Date());
+
+		String headerKey = "Content-Disposition";
+		String headerValue = "attachment; filename=type_gold" + currentDateTime + ".xlsx";
+		response.setHeader(headerKey, headerValue);
+
+		List<GetTotalPaymentCustomer> platinumCustomerList = new ArrayList<>();
+		customerRepo.getGoldCustomers().forEach(platinumCustomerList::add);
+		TypeCustomerExcelExporter excelExporter = new TypeCustomerExcelExporter(platinumCustomerList);
+		excelExporter.export(response);
 	}
-	
+
 //	xuất file excel khách hàng silver
 	@GetMapping("/type-customer/excel/export/silver")
 	public void exportSilverCustomer(HttpServletResponse response) throws IOException {
 		response.setContentType("application/octet-stream");
 		DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
-        String currentDateTime = dateFormatter.format(new Date());
-        
-        String headerKey = "Content-Disposition";
-        String headerValue = "attachment; filename=type_silver" + currentDateTime + ".xlsx";
-        response.setHeader(headerKey, headerValue);
-        
-        List<GetTotalPaymentCustomer> platinumCustomerList = new ArrayList<>();
-        customerRepo.getSilverCustomers().forEach(platinumCustomerList::add);
-        TypeCustomerExcelExporter excelExporter = new TypeCustomerExcelExporter(platinumCustomerList);
-        excelExporter.export(response); 
+		String currentDateTime = dateFormatter.format(new Date());
+
+		String headerKey = "Content-Disposition";
+		String headerValue = "attachment; filename=type_silver" + currentDateTime + ".xlsx";
+		response.setHeader(headerKey, headerValue);
+
+		List<GetTotalPaymentCustomer> platinumCustomerList = new ArrayList<>();
+		customerRepo.getSilverCustomers().forEach(platinumCustomerList::add);
+		TypeCustomerExcelExporter excelExporter = new TypeCustomerExcelExporter(platinumCustomerList);
+		excelExporter.export(response);
 	}
-	
+
 //	xuất file excel khách hàng vip
 	@GetMapping("/type-customer/excel/export/vip")
 	public void exportVipCustomer(HttpServletResponse response) throws IOException {
 		response.setContentType("application/octet-stream");
 		DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
-        String currentDateTime = dateFormatter.format(new Date());
-        
-        String headerKey = "Content-Disposition";
-        String headerValue = "attachment; filename=type_vip" + currentDateTime + ".xlsx";
-        response.setHeader(headerKey, headerValue);
-        
-        List<GetTotalPaymentCustomer> platinumCustomerList = new ArrayList<>();
-        customerRepo.getVipCustomer().forEach(platinumCustomerList::add);
-        TypeCustomerExcelExporter excelExporter = new TypeCustomerExcelExporter(platinumCustomerList);
-        excelExporter.export(response); 
+		String currentDateTime = dateFormatter.format(new Date());
+
+		String headerKey = "Content-Disposition";
+		String headerValue = "attachment; filename=type_vip" + currentDateTime + ".xlsx";
+		response.setHeader(headerKey, headerValue);
+
+		List<GetTotalPaymentCustomer> platinumCustomerList = new ArrayList<>();
+		customerRepo.getVipCustomer().forEach(platinumCustomerList::add);
+		TypeCustomerExcelExporter excelExporter = new TypeCustomerExcelExporter(platinumCustomerList);
+		excelExporter.export(response);
 	}
-	
+
 //	đếm số order của khách hàng
 	@GetMapping("/customers/count-orders")
 	public ResponseEntity<Object> getCustomerCountOrder() {
@@ -122,11 +161,11 @@ public class CustomerController {
 			return new ResponseEntity<>(e.getCause().getCause().getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
+
 //	lọc số order của khách hàng theo ngày
 	@GetMapping("/customers/filter-count-orders")
-	public ResponseEntity<Object> countOrderOfCustomerByDate(@RequestParam String firstDate
-			, @RequestParam String lastDate) {
+	public ResponseEntity<Object> countOrderOfCustomerByDate(@RequestParam String firstDate,
+			@RequestParam String lastDate) {
 		try {
 			return new ResponseEntity<>(customerRepo.filterCountCustomerOrder(firstDate, lastDate), HttpStatus.OK);
 		} catch (Exception e) {
@@ -148,7 +187,7 @@ public class CustomerController {
 			return new ResponseEntity<>(e.getCause().getCause().getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
+
 //	lấy khách hàng dựa trên số điện thoại
 	@GetMapping("/customers/phone/{phoneNumber}")
 	public ResponseEntity<Object> getCustomerByPhone(@PathVariable String phoneNumber) {
@@ -168,6 +207,9 @@ public class CustomerController {
 	@PostMapping("/customers")
 	public ResponseEntity<Object> createCustomer(@Valid @RequestBody Customer newCustomer) {
 		try {
+			newCustomer.setPassword("$2a$10$LiQfGYKQ7eLdHKIZhmmbguw4B2ch9pYdEdjLMXBGCeda3pxtIdfR6");
+			newCustomer.setUsername(newCustomer.getPhoneNumber());
+			newCustomer.setRoles(Arrays.asList(roleRepo.findById(G_CUSTOMER_ID).get()));
 			return new ResponseEntity<>(customerRepo.save(newCustomer), HttpStatus.CREATED);
 		} catch (Exception e) {
 			return new ResponseEntity<>(e.getCause().getCause().getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);

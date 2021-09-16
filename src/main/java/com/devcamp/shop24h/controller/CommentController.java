@@ -15,8 +15,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.devcamp.shop24h.model.Comments;
+import com.devcamp.shop24h.model.Customer;
 import com.devcamp.shop24h.model.Product;
 import com.devcamp.shop24h.repository.CommentsRepo;
+import com.devcamp.shop24h.repository.CustomerRepo;
 import com.devcamp.shop24h.repository.ProductRepo;
 
 @CrossOrigin
@@ -26,18 +28,23 @@ public class CommentController {
 	CommentsRepo commentsRepo;
 	@Autowired
 	ProductRepo productRepo;
+	@Autowired
+	CustomerRepo customerRepo;
 	
 //	tạo mới comment
-	@PostMapping("/products/{productId}/comments")
-	public ResponseEntity<Object> createNewComments(@PathVariable int productId,@Valid @RequestBody Comments newComments) {
+	@PostMapping("/customers/{customerId}/products/{productId}/comments")
+	public ResponseEntity<Object> createNewComments(
+			@PathVariable int productId,
+			@PathVariable long customerId,
+			@Valid @RequestBody Comments newComments) {
 		try {
 			Optional<Product> existProduct = productRepo.findById(productId);
-			if (existProduct.isPresent()) {				
-				newComments.setProductId(existProduct.get());
-				return new ResponseEntity<>(commentsRepo.save(newComments) ,HttpStatus.CREATED);
-			} else {
-				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-			}
+			newComments.setProductId(existProduct.get());
+			Optional<Customer> customerFound = customerRepo.findById(customerId);
+			Customer customer = customerFound.get();
+			newComments.setCustomerId(customer);
+			newComments.setName(customer.getFirstName() + ' ' + customer.getLastName());
+			return new ResponseEntity<>(commentsRepo.save(newComments) ,HttpStatus.CREATED);
 		} catch (Exception e) {
 			return new ResponseEntity<>(e.getCause().getCause().getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}

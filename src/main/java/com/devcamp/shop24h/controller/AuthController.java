@@ -87,29 +87,4 @@ public class AuthController {
         System.out.println(userPrincipal.getAuthorities());
         return ResponseEntity.ok(token.getToken());
     }
-    
-    @PreAuthorize("hasAuthority('CUSTOMER')")
-    @GetMapping("/user/checkrole")
-    public ResponseEntity<Object> checkRole() {
-    	try {
-			return ResponseEntity.ok("customer");
-		} catch (Exception e) {
-			return new ResponseEntity<>(e.getCause().getCause().getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-    }
-    
-    @PreAuthorize("hasAuthority('READ')")
-    @GetMapping("/user-info")
-    public ResponseEntity<Object> getUserInfo() {
-    	try {
-    		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    		UserPrincipal user = Optional.of(((UserPrincipal) authentication.getPrincipal())).get();
-    		List<Object> listInfo = new ArrayList<>();
-    		listInfo.add(user.getUsername());
-    		listInfo.add(user.getUserId());
-    		return ResponseEntity.ok(listInfo);
-		} catch (Exception e) {
-			return new ResponseEntity<>(e.getCause().getCause().getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-    }
 }
