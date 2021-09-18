@@ -81,6 +81,15 @@ public class CommentController {
 		}
 	}
 	
+	@GetMapping("/comments")
+	public ResponseEntity<Object> getAllComments() {
+		try {
+			return ResponseEntity.ok(commentsRepo.getAllComments());
+		} catch (Exception e) {
+			return new ResponseEntity<>(e.getCause().getCause().getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
 	@PutMapping("/comments/{commentId}")
 	public ResponseEntity<Object> editComments(@PathVariable int commentId, @Valid Comments newComments) {
 		try {

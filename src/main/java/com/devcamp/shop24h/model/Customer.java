@@ -25,8 +25,7 @@ public class Customer extends BaseEntity {
 	@Column(name = "first_name", nullable = false)
 	private String firstName;
 
-	@NotEmpty(message = "phone number can't be empty")
-	@Column(name = "phone_number", unique = true, nullable = false)
+	@Column(name = "phone_number")
 	private String phoneNumber;
 
 	private String username;

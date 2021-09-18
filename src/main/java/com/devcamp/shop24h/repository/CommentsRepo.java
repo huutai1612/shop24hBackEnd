@@ -24,4 +24,8 @@ public interface CommentsRepo extends JpaRepository<Comments, Integer>{
 			+ "from comments c \r\n"
 			+ "where c.product_id = :productId", nativeQuery = true)
 	public List<GetComments> getCommentByProductId(@Param("productId") int productId);
+	
+	@Query(value = "select c.id, c.comments , c.name , c.rate_star rateStar, c.product_id productId, c.customer_id  customerId\r\n"
+			+ "from comments c \r\n", nativeQuery = true)
+	public List<GetComments> getAllComments();
 }
