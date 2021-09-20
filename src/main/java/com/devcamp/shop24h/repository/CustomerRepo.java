@@ -16,7 +16,13 @@ import com.devcamp.shop24h.model.Customer;
 public interface CustomerRepo extends JpaRepository<Customer, Long> {
 	Customer findByUsername(String username);
 	Customer findByPhoneNumber(String phoneNumber);
-//	Optional<Customer> findByPhoneNumber(String phoneNumber);
+	
+	@Query(value = "select c.* \r\n"
+			+ "from customers c \r\n"
+			+ "join t_user_role tur on c.id = tur.user_id \r\n"
+			+ "join t_role tr on tr.id  = tur.role_id \r\n"
+			+ "where tr.id = :roleId", nativeQuery = true)
+	List<Customer> getCustomerByrole(@Param("roleId") long roleId);
 
 	@Query(value = "select concat(c.first_name, ' ', c.last_name) fullName , count(o.id) totalOrder \r\n"
 			+ "from orders o \r\n" + "join customers c on o.customer_id = c.id \r\n"

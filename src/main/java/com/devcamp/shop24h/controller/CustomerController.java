@@ -55,6 +55,16 @@ public class CustomerController {
 			return new ResponseEntity<>(e.getCause().getCause().getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+	
+//	get customer by role
+	@GetMapping("/customers/roles/{roleId}")
+	public ResponseEntity<Object> getCustomerByRole(@PathVariable long roleId) {
+		try {
+			return ResponseEntity.ok(customerRepo.getCustomerByrole(roleId));
+		} catch (Exception e) {
+			return new ResponseEntity<>(e.getCause().getCause().getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 
 //	has authority
 //	get info khach hang
@@ -234,6 +244,7 @@ public class CustomerController {
 				updateCustomer.setPostalCode(newCustomer.getPostalCode());
 				updateCustomer.setSalesRepEmployeeNumber(newCustomer.getSalesRepEmployeeNumber());
 				updateCustomer.setState(newCustomer.getState());
+				updateCustomer.setUsername(newCustomer.getPhoneNumber());
 				return new ResponseEntity<>(customerRepo.save(updateCustomer), HttpStatus.OK);
 			} else {
 				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
