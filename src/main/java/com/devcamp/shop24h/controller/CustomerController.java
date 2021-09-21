@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import javax.management.relation.RoleList;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
@@ -30,6 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.devcamp.shop24h.getquery.GetTotalPaymentCustomer;
 import com.devcamp.shop24h.model.Customer;
+import com.devcamp.shop24h.model.Role;
 import com.devcamp.shop24h.repository.CustomerRepo;
 import com.devcamp.shop24h.repository.RoleRepo;
 import com.devcamp.shop24h.security.UserPrincipal;
@@ -246,6 +248,28 @@ public class CustomerController {
 				updateCustomer.setState(newCustomer.getState());
 				updateCustomer.setUsername(newCustomer.getPhoneNumber());
 				return new ResponseEntity<>(customerRepo.save(updateCustomer), HttpStatus.OK);
+			} else {
+				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			}
+		} catch (Exception e) {
+			return new ResponseEntity<>(e.getCause().getCause().getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+//	Sửa role khách hàng
+	@CrossOrigin
+	@PutMapping("/roles/{roleId}/customers-set-role/{customerId}")
+	public ResponseEntity<Object> updateRoleCustomer(@PathVariable long customerId,
+			@PathVariable long roleId) {
+		try {
+			Optional<Customer> customerFound = customerRepo.findById(customerId);
+			if (customerFound.isPresent()) {
+				Customer updateCustomer = customerFound.get();
+				List<Role> roleList = new ArrayList<>();
+				roleList.add(roleRepo.findById(roleId).get());
+				updateCustomer.setRoles(roleList);
+				customerRepo.save(updateCustomer);
+				return new ResponseEntity<>(updateCustomer, HttpStatus.OK);
 			} else {
 				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 			}

@@ -49,6 +49,16 @@ public class OrderController {
 		}
 	}
 	
+//	get order by customer id
+	@GetMapping("/customers/{customerId}/orders")
+	public ResponseEntity<Object> getOrderByCustomerId(@PathVariable long customerId) {
+		try {
+			return new ResponseEntity<>(orderRepo.getOrderByCustomerId(customerId), HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(e.getCause().getCause().getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
 //	lấy order dựa trên id
 	@GetMapping("/orders/{orderId}")
 	public ResponseEntity<Object> getOrderById(@PathVariable Integer orderId) {

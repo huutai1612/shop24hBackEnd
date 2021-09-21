@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.devcamp.shop24h.getquery.GetOrderWithCustomer;
@@ -17,4 +18,12 @@ public interface OrderRepo extends JpaRepository<Order, Integer> {
 			+ "from orders o \r\n"
 			+ "join customers c on o.customer_id = c.id  ", nativeQuery = true)
 	public List<GetOrderWithCustomer>  getOrderWithCustomer();
+	
+	@Query(value = "select o.id , o.comments , o.order_date orderDate, o.required_date requiredDate,"
+			+ " o.shipped_date shippedDate, o.status , concat(c.first_name, ' ',"
+			+ " c.last_name) fullName, c.phone_number phoneNumber\r\n"
+			+ "from orders o \r\n"
+			+ "join customers c on o.customer_id = c.id  "
+			+ "where c.id = :customerId", nativeQuery = true)
+	public List<GetOrderWithCustomer>  getOrderByCustomerId(@Param("customerId") long customerId);
 }
