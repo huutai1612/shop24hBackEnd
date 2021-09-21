@@ -1,6 +1,7 @@
 package com.devcamp.shop24h.model;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -11,8 +12,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotEmpty;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -41,6 +42,9 @@ public class Comments {
 	@JsonIgnore
 	@JoinColumn(name = "customerId")
 	private Customer customerId;
+
+	@OneToMany(mappedBy = "commentId", fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	List<ReplyComment> replies;
 
 	public Comments(int id, String name, String comments, BigDecimal rateStar, Product productId, Customer customerId) {
 		super();
@@ -109,6 +113,20 @@ public class Comments {
 	 */
 	public void setCustomerId(Customer customerId) {
 		this.customerId = customerId;
+	}
+
+	/**
+	 * @return the replies
+	 */
+	public List<ReplyComment> getReplies() {
+		return replies;
+	}
+
+	/**
+	 * @param replies the replies to set
+	 */
+	public void setReplies(List<ReplyComment> replies) {
+		this.replies = replies;
 	}
 
 }
