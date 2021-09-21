@@ -17,7 +17,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -44,6 +46,9 @@ public class AuthController {
     
     @Autowired
     private RoleRepo roleRepo;
+    
+    @Autowired
+    private CustomerRepo customerRepo;
     
     
     private Long G_CUSTOMER_ID = 3L;
@@ -86,5 +91,47 @@ public class AuthController {
         tokenService.createToken(token);
         System.out.println(userPrincipal.getAuthorities());
         return ResponseEntity.ok(token.getToken());
+    }
+    
+    @PutMapping("/admin/change-password/customers/{customerId}")
+    public ResponseEntity<Object> adminChangePassWord(@PathVariable long customerId
+    		,@RequestBody Customer newCustomer) {
+    	try {
+    		Optional<Customer> customerFound = customerRepo.findById(customerId);
+    		if (customerFound.isPresent()) {
+    			Customer updateCustomer = customerFound.get();
+    			updateCustomer.setPassword(new BCryptPasswordEncoder().encode(newCustomer.getPassword()));
+    			customerRepo.save(updateCustomer);
+    			return new ResponseEntity<>("Password changed", HttpStatus.OK);
+    		} else {
+    			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    		}
+		} catch (Exception e) {
+			return new ResponseEntity<>(e.getCause().getCause().getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+    }
+    
+    @PutMapping("/customer/change-password/customers/{customerId}/old-password/{oldPassword}")
+    public ResponseEntity<Object> adminChangePassWord(@PathVariable long customerId
+    		,@PathVariable String oldPassword
+    		,@RequestBody Customer newCustomer) {
+    	try {
+    		Optional<Customer> customerFound = customerRepo.findById(customerId);
+    		if (customerFound.isPresent()) {
+    			Customer updateCustomer = customerFound.get();
+    			String currentPas = updateCustomer.getPassword();
+    			if (!new BCryptPasswordEncoder().matches(oldPassword, currentPas)) {
+    				return new ResponseEntity<>("Password not match", HttpStatus.UNAUTHORIZED);
+    			} else {
+    				updateCustomer.setPassword(new BCryptPasswordEncoder().encode(newCustomer.getPassword()));
+    				customerRepo.save(updateCustomer);
+    				return new ResponseEntity<>("Password's changed", HttpStatus.OK);
+    			}	
+    		} else {
+    			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    		}
+		} catch (Exception e) {
+			return new ResponseEntity<>(e.getCause().getCause().getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
     }
 }
