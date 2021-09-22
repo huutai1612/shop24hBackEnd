@@ -2,6 +2,7 @@ package com.devcamp.shop24h.controller;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -54,6 +55,7 @@ public class AuthController {
     private Long G_CUSTOMER_ID = 3L;
     private Long G_MANAGER_ID = 2L;
 
+//    register customer
     @PostMapping("/register/customer")
     public ResponseEntity<Object> registerCUstomer(@RequestBody Customer user) {
     	try {
@@ -66,6 +68,7 @@ public class AuthController {
 		}
     }
     
+//    reguster manager
     @PostMapping("/register/manager")
     public ResponseEntity<Object> registerManager(@RequestBody Customer user) {
     	try {
@@ -78,6 +81,7 @@ public class AuthController {
 		}
     }
 
+//    login
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Customer user) {
         UserPrincipal userPrincipal = userService.findByPhoneNumber(user.getPhoneNumber());
@@ -93,7 +97,9 @@ public class AuthController {
         return ResponseEntity.ok(token.getToken());
     }
     
+//    change password by admin
     @PutMapping("/admin/change-password/customers/{customerId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Object> adminChangePassWord(@PathVariable long customerId
     		,@RequestBody Customer newCustomer) {
     	try {
@@ -111,6 +117,8 @@ public class AuthController {
 		}
     }
     
+//    change password by user
+    @PreAuthorize("hasAuthority('UPDATE')")
     @PutMapping("/customer/change-password/customers/{customerId}/old-password/{oldPassword}")
     public ResponseEntity<Object> adminChangePassWord(@PathVariable long customerId
     		,@PathVariable String oldPassword

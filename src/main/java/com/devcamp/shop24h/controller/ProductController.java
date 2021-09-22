@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -118,6 +119,7 @@ public class ProductController {
 	}
 	
 //	tạo mới product
+	@PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
 	@PostMapping("/product-lines/{productLineId}/products")
 	public ResponseEntity<Object> createProduct(@Valid @RequestBody Product newProduct,
 			@PathVariable Integer productLineId) {
@@ -135,6 +137,7 @@ public class ProductController {
 	}
 	
 //	sửa product
+	@PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
 	@PutMapping("/products/{productId}")
 	public ResponseEntity<Object> updateProduct(@PathVariable Integer productId, @Valid @RequestBody Product newProduct) {
 		try {
@@ -160,6 +163,7 @@ public class ProductController {
 	}
 	
 //	xóa product by id
+	@PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
 	@DeleteMapping("/products/{productId}")
 	public ResponseEntity<Object> deleteProductById(@PathVariable Integer productId) {
 		try {
@@ -176,6 +180,7 @@ public class ProductController {
 	}
 	
 //	xóa tất cả product
+	@PreAuthorize("hasRole('ADMIN')")
 	@DeleteMapping("/products")
 	public ResponseEntity<Object> deleteAllProduct() {
 		try {

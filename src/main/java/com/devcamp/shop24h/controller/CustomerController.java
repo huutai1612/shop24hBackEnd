@@ -86,7 +86,7 @@ public class CustomerController {
 	}
 	
 //	check role
-	@PreAuthorize("hasAuthority('CUSTOMER')")
+	@PreAuthorize("hasRole('CUSTOMER')")
     @GetMapping("/user/checkrole")
     public ResponseEntity<Object> checkRole() {
     	try {
@@ -229,6 +229,7 @@ public class CustomerController {
 	}
 
 //	sửa thông tin khách hàng
+	@PreAuthorize("hasAuthority('UPDATE')")
 	@PutMapping("/customers/{customerId}")
 	public ResponseEntity<Object> updateCustomer(@Valid @RequestBody Customer newCustomer,
 			@PathVariable Long customerId) {
@@ -257,7 +258,7 @@ public class CustomerController {
 	}
 	
 //	Sửa role khách hàng
-	@CrossOrigin
+	@PreAuthorize("hasRole('ADMIN')")
 	@PutMapping("/roles/{roleId}/customers-set-role/{customerId}")
 	public ResponseEntity<Object> updateRoleCustomer(@PathVariable long customerId,
 			@PathVariable long roleId) {
@@ -279,6 +280,7 @@ public class CustomerController {
 	}
 
 //	xóa tất cả khách hàng
+	@PreAuthorize("hasRole('ADMIN')")
 	@DeleteMapping("/customers")
 	public ResponseEntity<Object> deleteAllCustomer() {
 		try {
@@ -290,6 +292,7 @@ public class CustomerController {
 	}
 
 //	xóa khách hàng dựa trên id
+	@PreAuthorize("hasRole('ADMIN')")
 	@DeleteMapping("/customers/{customerId}")
 	public ResponseEntity<Object> deleteCustomerById(@PathVariable Long customerId) {
 		try {
