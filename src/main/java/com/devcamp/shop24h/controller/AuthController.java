@@ -51,7 +51,7 @@ public class AuthController {
     @Autowired
     private CustomerRepo customerRepo;
     
-    
+    private Long G_ADMIN_ID = 1L;
     private Long G_CUSTOMER_ID = 3L;
     private Long G_MANAGER_ID = 2L;
 
@@ -68,7 +68,7 @@ public class AuthController {
 		}
     }
     
-//    reguster manager
+//    register manager
     @PostMapping("/register/manager")
     public ResponseEntity<Object> registerManager(@RequestBody Customer user) {
     	try {
@@ -80,6 +80,19 @@ public class AuthController {
 			return new ResponseEntity<>(e.getCause().getCause().getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
     }
+    
+//  register Admin
+  @PostMapping("/register/admin")
+  public ResponseEntity<Object> regisTerAdmin(@RequestBody Customer user) {
+  	try {
+  		user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
+  		user.setUsername(user.getPhoneNumber());
+  		user.setRoles(Arrays.asList(roleRepo.findById(G_ADMIN_ID ).get()));
+  		return new ResponseEntity<>(userService.createUser(user), HttpStatus.CREATED);
+		} catch (Exception e) {
+			return new ResponseEntity<>(e.getCause().getCause().getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+  }
 
 //    login
     @PostMapping("/login")
